@@ -141,11 +141,10 @@ class _MyHomePageState extends State<MyHomePage> {
       future: modelController.fetchData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+          return Scaffold(
+              body: Center(
+            child: CircularProgressIndicator(),
+          ));
         } else if (snapshot.hasData) {
           return Scaffold(
             body: SafeArea(
@@ -178,9 +177,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               // After selecting the desired option,it will
                               // change button value to selected value
                               onChanged: (String? newValue) {
-
-                                  modelController.dropdownvalue = newValue!;
-                                  modelController.update();
+                                modelController.dropdownvalue = newValue!;
+                                modelController.update();
                                 modelController.opt1 = newValue;
                                 modelController.update();
                                 if (kDebugMode) {
@@ -222,9 +220,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               // After selecting the desired option,it will
                               // change button value to selected value
                               onChanged: (String? newValue) {
-
-                                  modelController.dropdownvalue2 = newValue!;
-                                  modelController.update();
+                                modelController.dropdownvalue2 = newValue!;
+                                modelController.update();
                                 modelController.opt2 = newValue;
                                 modelController.update();
                                 if (kDebugMode) {
@@ -275,10 +272,27 @@ class _MyHomePageState extends State<MyHomePage> {
                             size: 50,
                           ),
                           onPressed: () async {
-                            // print(modelController.opt2);
-                            // print(modelController.opt1);
-                            modelController.update();
-                            await modelController.convertData();
+                            // Show the CircularProgressIndicator during the delay
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+
+                            // Perform the delayed operation
+                            await Future.delayed(Duration(seconds: 3));
+
+                            // Dismiss the CircularProgressIndicator dialog
+                            Navigator.of(context).pop();
+
+                            // Continue with the rest of your logic
+                            setState(() async {
+                              modelController.update();
+                              await modelController.convertData();
+                            });
                           },
                         ),
                         Expanded(
